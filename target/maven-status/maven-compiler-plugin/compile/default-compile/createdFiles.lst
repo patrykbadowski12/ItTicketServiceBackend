@@ -1,0 +1,7 @@
+com\FujiIKEAtsusys\ItTicketService\Controller\TicketController.class
+com\FujiIKEAtsusys\ItTicketService\Config\RedisConf.class
+com\FujiIKEAtsusys\ItTicketService\DBModels\UserDbModel.class
+com\FujiIKEAtsusys\ItTicketService\Repositories\TicketRepository.class
+com\FujiIKEAtsusys\ItTicketService\Repositories\UserRepository.class
+com\FujiIKEAtsusys\ItTicketService\ItTicketServiceApplication.class
+com\FujiIKEAtsusys\ItTicketService\DBModels\TicketDbModel.class
