@@ -8,6 +8,7 @@ import org.springframework.web.server.WebSession;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 
 @CrossOrigin(origins = "*", allowCredentials = "true")
@@ -27,6 +28,7 @@ public class TicketController {
     @PostMapping("/register")
     ResponseEntity<String> register(@RequestBody UserDbModel userDbModel){
         if(userRepository.findByEmail(userDbModel.getEmail()) == null){
+            userDbModel.setRole("USER");
             userRepository.save(userDbModel);
             return ResponseEntity.ok().build();
         } else {
@@ -45,19 +47,19 @@ public class TicketController {
     }
 
     @PostMapping("/ticket/add")
-    ResponseEntity<String> addTicket(WebSession session, @RequestBody TicketDbModel ticketDbModel){
-        ticketDbModel.setStatus("toDo");
-        ticketDbModel.setDate(new Date());
-        ticketDbModel.setDepartment(userRepository.findByEmail(sessionStorage.findById(session.getId())).getDepartment());
-        ticketDbModel.setName(userRepository.findByEmail(sessionStorage.findById(session.getId())).getName());
-        ticketDbModel.setLastname(userRepository.findByEmail(sessionStorage.findById(session.getId())).getLastname());
-        ticketRepository.save(ticketDbModel);
-        return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/getAll")
-    ResponseEntity<List<UserDbModel>> getAllUsers(){
-        return ResponseEntity.ok(userRepository.findAll());
+    ResponseEntity<String> addTicket(WebSession session, @RequestBody TicketDbModel ticketDbModel) {
+        if (userRepository.findByEmail(sessionStorage.findById(session.getId())).getRole().equals("USER")) {
+            ticketDbModel.setId(UUID.randomUUID().toString());
+            ticketDbModel.setStatus("toDo");
+            ticketDbModel.setDate(new Date());
+            ticketDbModel.setDepartment(userRepository.findByEmail(sessionStorage.findById(session.getId())).getDepartment());
+            ticketDbModel.setName(userRepository.findByEmail(sessionStorage.findById(session.getId())).getName());
+            ticketDbModel.setLastname(userRepository.findByEmail(sessionStorage.findById(session.getId())).getLastname());
+            ticketRepository.save(ticketDbModel);
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @GetMapping("/getAllTickets")

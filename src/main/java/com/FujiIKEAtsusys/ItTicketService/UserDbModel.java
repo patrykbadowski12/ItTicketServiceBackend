@@ -17,11 +17,11 @@ public class UserDbModel {
     String id;
 
     String email;
-
     String name;
     String lastname;
     String department;
     String password;
     String position;
+    String role;
 
 }
