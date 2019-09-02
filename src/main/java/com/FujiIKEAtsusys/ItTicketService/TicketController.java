@@ -37,10 +37,11 @@ public class TicketController {
     }
 
     @PostMapping("/login")
-    ResponseEntity<String> login(WebSession session, @RequestBody Map<String,String> loginForm){
-        if(userRepository.findByEmailAndPassword(loginForm.get("email"),loginForm.get("password"))!= null){
+    ResponseEntity<String> login(WebSession session, @RequestBody LoginForm loginForm){
+        if(userRepository.findByEmailAndPassword(loginForm.getEmail(),loginForm.getPassword())!= null){
             session.start();
-            sessionStorage.saveUser(session.getId(),loginForm.get("email"));
+            sessionStorage.saveUser(session.getId(),loginForm.getEmail());
+            System.out.println("działa");
             return ResponseEntity.ok().build();
         } else
             return ResponseEntity.notFound().build();
@@ -67,5 +68,16 @@ public class TicketController {
         return ResponseEntity.ok(ticketRepository.findByEmail(sessionStorage.findById(session.getId())));
     }
 
+    @PostMapping("/createUser")
+    ResponseEntity<Void> createUser(){
+        UserDbModel user = new UserDbModel("1", "patryk_badowski@o2.pl", "Patryk", "Badowski", "R&D", "dupa123", "administrator", "ADMIN");
+        userRepository.save(user);
+        return ResponseEntity.ok().build();
+    }
 
+    @GetMapping("getUsers")
+    ResponseEntity<List<UserDbModel>> getAllUsers(){
+        List<UserDbModel> all = userRepository.findAll();
+        return ResponseEntity.ok(all);
+    }
 }
