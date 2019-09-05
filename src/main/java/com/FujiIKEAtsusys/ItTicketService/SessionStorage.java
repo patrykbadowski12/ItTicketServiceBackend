@@ -18,4 +18,6 @@ public class SessionStorage {
     public String findById(final String userId) {
         return userTemplate.opsForValue().get(userId);
     }
+
+
 }

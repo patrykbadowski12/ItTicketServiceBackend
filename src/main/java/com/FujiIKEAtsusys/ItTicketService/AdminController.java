@@ -20,8 +20,8 @@ public class AdminController {
     SessionStorage sessionStorage;
 
     @GetMapping("/admin/getAllTickets")
-    ResponseEntity<List<TicketDbModel>> getAllTickets(){
-        return ResponseEntity.ok(ticketRepository.findAll());
+    List<TicketDbModel> getAllTickets(){
+        return ticketRepository.findAll();
     }
 
     @PutMapping("/admin/updateStatusTicket")
@@ -39,6 +39,12 @@ public class AdminController {
     @GetMapping("/admin/getAllDone")
     ResponseEntity<List<TicketDbModel>> getAllDoneTickets(){
         return ResponseEntity.ok(ticketRepository.findByStatus("Done"));
+    }
+
+    @PostMapping("/admin/createUser")
+    ResponseEntity<Void> createUser(@RequestBody UserDbModel userDbModel){
+        userRepository.save(userDbModel);
+        return ResponseEntity.ok().build();
     }
 
 }
